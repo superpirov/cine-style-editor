@@ -15,7 +15,6 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; -webkit-user-select: none; }
         body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        
         header {
             padding: 15px 20px;
             background: linear-gradient(90deg, #1a1a24 0%, #252535 100%);
@@ -146,35 +145,32 @@
 
 <script>
     /**
-     * Фильтры теперь заданы как числовые параметры для пиксельной обработки.
-     * brightness: множитель яркости (1 = норма)
-     * contrast: множитель контраста (1 = норма)
-     * saturation: множитель насыщенности (1 = норма)
-     * sepia: сила сепии (0..1)
-     * hueShift: сдвиг оттенка в градусах (-180..180)
-     * warmth: тёплый/холодный сдвиг (-1..1, отрицательный = холодный)
+     * Исправленные параметры стилей.
+     * Все значения максимально приближены к естественным.
+     * saturation теперь в диапазоне 0.8..1.15 вместо экстремальных значений.
+     * warmth — очень мягкий сдвиг.
      */
     const styles = [
-        { name: "Original",          p: { brightness: 1, contrast: 1, saturation: 1, sepia: 0, hueShift: 0, warmth: 0 } },
-        { name: "Kodak Portra",      p: { brightness: 1.05, contrast: 0.95, saturation: 1.1, sepia: 0.15, hueShift: 0, warmth: 0.08 } },
-        { name: "Fujifilm Classic",  p: { brightness: 1.02, contrast: 1.05, saturation: 1.15, sepia: 0.05, hueShift: -5, warmth: 0.05 } },
-        { name: "Noir B&W",          p: { brightness: 0.9, contrast: 1.3, saturation: 0, sepia: 0, hueShift: 0, warmth: 0 } },
-        { name: "Urban Night",       p: { brightness: 0.9, contrast: 1.15, saturation: 0.9, sepia: 0.05, hueShift: 8, warmth: -0.05 } },
-        { name: "Forest Green",      p: { brightness: 0.95, contrast: 1.05, saturation: 1.1, sepia: 0.08, hueShift: 12, warmth: 0.03 } },
-        { name: "Vintage Film",      p: { brightness: 1.1, contrast: 0.9, saturation: 0.9, sepia: 0.35, hueShift: 0, warmth: 0.1 } },
-        { name: "Nordic Cold",       p: { brightness: 1.05, contrast: 1.05, saturation: 0.85, sepia: 0, hueShift: 10, warmth: -0.12 } },
-        { name: "Golden Hour",       p: { brightness: 1.08, contrast: 0.95, saturation: 1.3, sepia: 0.2, hueShift: 0, warmth: 0.15 } },
-        { name: "Pastel Soft",       p: { brightness: 1.1, contrast: 0.9, saturation: 1.1, sepia: 0.05, hueShift: 0, warmth: 0.04 } },
-        { name: "High Key",          p: { brightness: 1.2, contrast: 0.85, saturation: 1.05, sepia: 0, hueShift: 0, warmth: 0 } },
-        { name: "Low Key",           p: { brightness: 0.8, contrast: 1.3, saturation: 0.95, sepia: 0, hueShift: 0, warmth: 0 } },
-        { name: "Cinematic Warm",    p: { brightness: 1.02, contrast: 1.1, saturation: 1.1, sepia: 0.1, hueShift: 0, warmth: 0.1 } },
-        { name: "Polaroid",          p: { brightness: 1.08, contrast: 1.05, saturation: 0.9, sepia: 0.2, hueShift: 0, warmth: 0.06 } },
-        { name: "Moody Desat",       p: { brightness: 0.9, contrast: 1.2, saturation: 0.7, sepia: 0.05, hueShift: 0, warmth: -0.03 } },
-        { name: "Gotham",            p: { brightness: 0.85, contrast: 1.3, saturation: 0.4, sepia: 0.08, hueShift: 0, warmth: -0.05 } },
-        { name: "Muted Earth",       p: { brightness: 0.98, contrast: 1.05, saturation: 0.8, sepia: 0.12, hueShift: 0, warmth: 0.06 } },
-        { name: "Soft Glow",         p: { brightness: 1.08, contrast: 0.95, saturation: 1.05, sepia: 0.03, hueShift: 0, warmth: 0.02 } },
-        { name: "Film Grain Sim",    p: { brightness: 1.02, contrast: 1.1, saturation: 1.05, sepia: 0.06, hueShift: 0, warmth: 0.04 } },
-        { name: "Natural Enhanced",  p: { brightness: 1.03, contrast: 1.08, saturation: 1.15, sepia: 0, hueShift: 0, warmth: 0.02 } }
+        { name: "Original",         p: null },
+        { name: "Kodak Portra",     p: { brightness: 1.03, contrast: 0.97, saturation: 1.05, sepia: 0.08, hueShift: 0, warmth: 0.04 } },
+        { name: "Fujifilm Classic", p: { brightness: 1.01, contrast: 1.03, saturation: 1.08, sepia: 0.03, hueShift: -3, warmth: 0.03 } },
+        { name: "Noir B&W",         p: { brightness: 0.92, contrast: 1.25, saturation: 0, sepia: 0, hueShift: 0, warmth: 0 } },
+        { name: "Urban Night",      p: { brightness: 0.92, contrast: 1.1, saturation: 0.92, sepia: 0.03, hueShift: 5, warmth: -0.03 } },
+        { name: "Forest Green",     p: { brightness: 0.97, contrast: 1.03, saturation: 1.06, sepia: 0.04, hueShift: 8, warmth: 0.02 } },
+        { name: "Vintage Film",     p: { brightness: 1.06, contrast: 0.93, saturation: 0.92, sepia: 0.22, hueShift: 0, warmth: 0.06 } },
+        { name: "Nordic Cold",      p: { brightness: 1.03, contrast: 1.03, saturation: 0.9, sepia: 0, hueShift: 6, warmth: -0.07 } },
+        { name: "Golden Hour",      p: { brightness: 1.05, contrast: 0.97, saturation: 1.12, sepia: 0.12, hueShift: 0, warmth: 0.08 } },
+        { name: "Pastel Soft",      p: { brightness: 1.06, contrast: 0.93, saturation: 1.04, sepia: 0.03, hueShift: 0, warmth: 0.02 } },
+        { name: "High Key",         p: { brightness: 1.15, contrast: 0.88, saturation: 1.02, sepia: 0, hueShift: 0, warmth: 0 } },
+        { name: "Low Key",          p: { brightness: 0.83, contrast: 1.22, saturation: 0.97, sepia: 0, hueShift: 0, warmth: 0 } },
+        { name: "Cinematic Warm",   p: { brightness: 1.01, contrast: 1.06, saturation: 1.05, sepia: 0.06, hueShift: 0, warmth: 0.06 } },
+        { name: "Polaroid",         p: { brightness: 1.05, contrast: 1.03, saturation: 0.93, sepia: 0.14, hueShift: 0, warmth: 0.04 } },
+        { name: "Moody Desat",      p: { brightness: 0.93, contrast: 1.15, saturation: 0.78, sepia: 0.03, hueShift: 0, warmth: -0.02 } },
+        { name: "Gotham",           p: { brightness: 0.87, contrast: 1.22, saturation: 0.5, sepia: 0.05, hueShift: 0, warmth: -0.03 } },
+        { name: "Muted Earth",      p: { brightness: 0.99, contrast: 1.03, saturation: 0.85, sepia: 0.08, hueShift: 0, warmth: 0.04 } },
+        { name: "Soft Glow",        p: { brightness: 1.05, contrast: 0.97, saturation: 1.02, sepia: 0.02, hueShift: 0, warmth: 0.01 } },
+        { name: "Film Grain Sim",   p: { brightness: 1.01, contrast: 1.06, saturation: 1.02, sepia: 0.04, hueShift: 0, warmth: 0.02 } },
+        { name: "Natural Enhanced", p: { brightness: 1.02, contrast: 1.05, saturation: 1.08, sepia: 0, hueShift: 0, warmth: 0.01 } }
     ];
 
     const canvas = document.getElementById('editorCanvas');
@@ -196,50 +192,55 @@
     let startX, startY;
     let renderTimeout = null;
 
-    // --- ПИКСЕЛЬНЫЙ ДВИЖОК ФИЛЬТРОВ ---
-    
+    // --- ИСПРАВЛЕННЫЙ ПИКСЕЛЬНЫЙ ДВИЖОК ---
+
     function applyPixelFilter(imageData, params, intensity) {
         const data = imageData.data;
         const len = data.length;
-        
-        // Предвычисление параметров с учётом интенсивности
+
+        // Интерполяция параметров от нейтральных (1/1/1/0/0/0) к целевым
         const br = 1 + (params.brightness - 1) * intensity;
         const ct = 1 + (params.contrast - 1) * intensity;
         const sat = 1 + (params.saturation - 1) * intensity;
         const sep = params.sepia * intensity;
         const warm = params.warmth * intensity;
         const hShift = params.hueShift * intensity;
-        
-        // Контрастный фактор
-        const ctFactor = (259 * (ct * 128 + 255)) / (255 * (259 - ct * 128));
-        
-        // Предвычисление синуса/косинуса для hue shift
-        const hasHue = Math.abs(hShift) > 0.1;
-        const rad = hShift * Math.PI / 180;
-        const cosH = Math.cos(rad);
-        const sinH = Math.sin(rad);
+
+        // Контраст: используем стандартную формулу
+        const ctIntercept = 128 * (1 - ct);
+
+        // Hue rotation через матрицу поворота в RGB-пространстве
+        const hasHue = Math.abs(hShift) > 0.01;
+        let cosH = 1, sinH = 0;
+        if (hasHue) {
+            const rad = hShift * Math.PI / 180;
+            cosH = Math.cos(rad);
+            sinH = Math.sin(rad);
+        }
 
         for (let i = 0; i < len; i += 4) {
             let r = data[i];
             let g = data[i + 1];
             let b = data[i + 2];
 
-            // Яркость
-            r *= br; g *= br; b *= br;
+            // 1. Яркость
+            r *= br;
+            g *= br;
+            b *= br;
 
-            // Контраст
-            r = ctFactor * (r - 128) + 128;
-            g = ctFactor * (g - 128) + 128;
-            b = ctFactor * (b - 128) + 128;
+            // 2. Контраст
+            r = ct * r + ctIntercept;
+            g = ct * g + ctIntercept;
+            b = ct * b + ctIntercept;
 
-            // Насыщенность (luminance weights)
-            const gray = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-            r = gray + sat * (r - gray);
-            g = gray + sat * (g - gray);
-            b = gray + sat * (b - gray);
+            // 3. Насыщенность (правильные BT.709 веса)
+            const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            r = lum + sat * (r - lum);
+            g = lum + sat * (g - lum);
+            b = lum + sat * (b - lum);
 
-            // Сепия
-            if (sep > 0) {
+            // 4. Сепия
+            if (sep > 0.001) {
                 const sr = 0.393 * r + 0.769 * g + 0.189 * b;
                 const sg = 0.349 * r + 0.686 * g + 0.168 * b;
                 const sb = 0.272 * r + 0.534 * g + 0.131 * b;
@@ -248,23 +249,30 @@
                 b = b + sep * (sb - b);
             }
 
-            // Тёплый/холодный сдвиг
+            // 5. Тёплый/холодный сдвиг (очень мягкий)
             if (warm !== 0) {
-                r += warm * 30;
-                b -= warm * 30;
+                r += warm * 20;
+                b -= warm * 20;
             }
 
-            // Hue rotation (упрощённая матрица)
+            // 6. Hue rotation (матрица поворота вокруг диагонали R=G=B)
             if (hasHue) {
-                const nr = r * cosH + g * sinH;
-                const ng = -r * sinH + g * cosH;
-                r = nr; g = ng;
+                const rr = r * (0.213 + 0.787 * cosH - 0.213 * sinH) +
+                           g * (0.715 - 0.715 * cosH - 0.715 * sinH) +
+                           b * (0.072 - 0.072 * cosH + 0.928 * sinH);
+                const gg = r * (0.213 - 0.213 * cosH + 0.143 * sinH) +
+                           g * (0.715 + 0.285 * cosH + 0.140 * sinH) +
+                           b * (0.072 - 0.072 * cosH - 0.283 * sinH);
+                const bb = r * (0.213 - 0.213 * cosH - 0.787 * sinH) +
+                           g * (0.715 - 0.715 * cosH + 0.715 * sinH) +
+                           b * (0.072 + 0.928 * cosH + 0.072 * sinH);
+                r = rr; g = gg; b = bb;
             }
 
-            // Clamp
-            data[i]     = r < 0 ? 0 : r > 255 ? 255 : r | 0;
-            data[i + 1] = g < 0 ? 0 : g > 255 ? 255 : g | 0;
-            data[i + 2] = b < 0 ? 0 : b > 255 ? 255 : b | 0;
+            // Clamp с правильным округлением
+            data[i]     = r < 0 ? 0 : r > 255 ? 255 : (r + 0.5) | 0;
+            data[i + 1] = g < 0 ? 0 : g > 255 ? 255 : (g + 0.5) | 0;
+            data[i + 2] = b < 0 ? 0 : b > 255 ? 255 : (b + 0.5) | 0;
         }
     }
 
@@ -298,44 +306,40 @@
             dy = ((ch - dh) / 2) + panY;
         }
 
-        // Рисуем исходное изображение без фильтров
+        // Рисуем исходное изображение БЕЗ каких-либо фильтров
         ctx.clearRect(0, 0, cw, ch);
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, cw, ch);
         ctx.filter = 'none';
         ctx.drawImage(originalImage, dx, dy, dw, dh);
 
-        // Применяем пиксельный фильтр
-        const intensity = parseInt(intensitySlider.value) / 100;
+        // КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: если стиль Original или интенсивность 0 — 
+        // НЕ трогаем пиксели вообще. Чистый оригинал без искажений.
         const styleParams = styles[currentStyleIndex].p;
-        
-        // Проверяем, нужен ли фильтр вообще
-        const isOriginal = currentStyleIndex === 0 && intensity === 0;
-        if (!isOriginal) {
-            // Определяем область для фильтрации (только видимая часть)
+        const intensity = parseInt(intensitySlider.value) / 100;
+
+        if (styleParams !== null && intensity > 0) {
             const fx = Math.max(0, Math.floor(dx));
             const fy = Math.max(0, Math.floor(dy));
-            const fw = Math.min(cw - fx, Math.ceil(dw));
-            const fh = Math.min(ch - fy, Math.ceil(dh));
-            
+            const fw = Math.min(cw - fx, Math.ceil(dw + (dx < 0 ? dx : 0)));
+            const fh = Math.min(ch - fy, Math.ceil(dh + (dy < 0 ? dy : 0)));
+
             if (fw > 0 && fh > 0) {
                 try {
                     const imageData = ctx.getImageData(fx, fy, fw, fh);
                     applyPixelFilter(imageData, styleParams, intensity);
                     ctx.putImageData(imageData, fx, fy);
-                } catch(e) {
-                    console.warn('Filter failed:', e);
+                } catch (e) {
+                    console.warn('Filter error:', e);
                 }
             }
         }
     }
 
-    // Debounced render для плавности на мобильных
     function debouncedRender() {
         if (renderTimeout) cancelAnimationFrame(renderTimeout);
         renderTimeout = requestAnimationFrame(() => {
             overlay.style.display = 'flex';
-            // Даём браузеру шанс отрисовать оверлей перед тяжёлой операцией
             setTimeout(() => {
                 render();
                 overlay.style.display = 'none';
@@ -423,7 +427,7 @@
         panX += (coords.x - startX) * (canvas.width / rect.width);
         panY += (coords.y - startY) * (canvas.height / rect.height);
         startX = coords.x; startY = coords.y;
-        requestAnimationFrame(render); // Без debounce для плавности перетаскивания
+        requestAnimationFrame(render);
     }
     function endDrag() { isDragging = false; canvasContainer.style.cursor = 'grab'; }
 
