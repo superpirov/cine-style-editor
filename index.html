@@ -12,7 +12,6 @@
             --accent-cyan: #00f3ff;
             --accent-pink: #bc13fe;
             --neon-glow: 0 0 10px rgba(0, 243, 255, 0.3), 0 0 20px rgba(188, 19, 254, 0.2);
-            --border-radius: 12px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; -webkit-user-select: none; }
@@ -46,11 +45,7 @@
             letter-spacing: 1px;
         }
 
-        .app-container {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
+        .app-container { display: flex; flex: 1; overflow: hidden; }
 
         .controls {
             width: 320px;
@@ -66,12 +61,7 @@
 
         .control-group { display: flex; flex-direction: column; gap: 10px; }
 
-        label {
-            font-size: 0.85rem;
-            color: #aaa;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        label { font-size: 0.85rem; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
 
         button, select {
             background: rgba(255,255,255,0.05);
@@ -83,12 +73,10 @@
             transition: all 0.3s ease;
             font-size: 0.9rem;
             outline: none;
+            width: 100%;
         }
 
-        button:hover, select:hover {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 8px rgba(0, 243, 255, 0.2);
-        }
+        button:hover, select:hover { border-color: var(--accent-cyan); box-shadow: 0 0 8px rgba(0, 243, 255, 0.2); }
 
         .btn-primary {
             background: linear-gradient(45deg, var(--accent-pink), var(--accent-cyan));
@@ -99,10 +87,13 @@
         
         .btn-primary:hover { opacity: 0.9; box-shadow: var(--neon-glow); }
 
-        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
-        .file-input-wrapper input[type=file] {
+        /* Новые стили для кнопок загрузки */
+        .upload-buttons { display: flex; gap: 8px; }
+        .upload-btn-wrapper { position: relative; overflow: hidden; flex: 1; }
+        .upload-btn-wrapper input[type=file] {
             position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;
         }
+        .upload-btn-wrapper button { pointer-events: none; }
 
         .canvas-area {
             flex: 1;
@@ -134,18 +125,8 @@
             padding-right: 5px;
         }
 
-        .filter-btn {
-            padding: 8px;
-            font-size: 0.8rem;
-            text-align: center;
-            background: rgba(255,255,255,0.03);
-        }
-
-        .filter-btn.active {
-            background: rgba(0, 243, 255, 0.15);
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-        }
+        .filter-btn { padding: 8px; font-size: 0.8rem; text-align: center; background: rgba(255,255,255,0.03); }
+        .filter-btn.active { background: rgba(0, 243, 255, 0.15); border-color: var(--accent-cyan); color: var(--accent-cyan); }
 
         input[type=range] { width: 100%; -webkit-appearance: none; background: transparent; }
         input[type=range]::-webkit-slider-thumb {
@@ -180,11 +161,21 @@
 
 <div class="app-container">
     <div class="controls">
+        <!-- ИСПРАВЛЕННЫЙ БЛОК ЗАГРУЗКИ -->
         <div class="control-group">
             <label>Источник изображения</label>
-            <div class="file-input-wrapper">
-                <button style="width:100%">📂 Выбрать файл / 📷 Камера</button>
-                <input type="file" id="uploadInput" accept="image/*" capture="environment">
+            <div class="upload-buttons">
+                <!-- Кнопка 1: Галерея / Файлы (без capture) -->
+                <div class="upload-btn-wrapper">
+                    <button>🖼️ Галерея</button>
+                    <input type="file" id="galleryInput" accept="image/*">
+                </div>
+                
+                <!-- Кнопка 2: Камера (с capture) -->
+                <div class="upload-btn-wrapper">
+                    <button>📷 Камера</button>
+                    <input type="file" id="cameraInput" accept="image/*" capture="environment">
+                </div>
             </div>
         </div>
 
@@ -229,7 +220,6 @@
 </div>
 
 <script>
-    // Обновленный список стилей: естественные, пленочные, кинематографичные
     const styles = [
         { name: "Original", filter: "" },
         { name: "Kodak Portra", filter: "sepia(0.2) contrast(0.95) brightness(1.05) saturate(1.1)" },
@@ -255,7 +245,9 @@
 
     const canvas = document.getElementById('editorCanvas');
     const ctx = canvas.getContext('2d');
-    const uploadInput = document.getElementById('uploadInput');
+    // Два отдельных инпута вместо одного
+    const galleryInput = document.getElementById('galleryInput');
+    const cameraInput = document.getElementById('cameraInput');
     const canvasSizeSelect = document.getElementById('canvasSize');
     const fitModeSelect = document.getElementById('fitMode');
     const intensitySlider = document.getElementById('intensity');
@@ -285,8 +277,8 @@
         });
     }
 
-    uploadInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
+    // Общая функция обработки файла
+    function handleFile(file) {
         if (!file) return;
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -305,7 +297,11 @@
             img.src = event.target.result;
         };
         reader.readAsDataURL(file);
-    });
+    }
+
+    // Слушатели для обоих инпутов
+    galleryInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+    cameraInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
 
     canvasSizeSelect.addEventListener('change', () => { resetPosition(); updateCanvasSize(); });
     fitModeSelect.addEventListener('change', () => { resetPosition(); render(); });
